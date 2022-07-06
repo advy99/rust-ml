@@ -8,7 +8,7 @@ pub fn minkowski_distance(point_a: &Vec<f64>, point_b: &Vec<f64>, p: i32) -> f64
 		distance = distance + abs_difference.powi(p);
 	}
 
-	distance.powf(1.0/p)
+	distance.powf( 1.0 / (p as f64))
 
 }
 
