@@ -24,7 +24,7 @@ impl KNNClassifier {
         let mut distances = Vec::<(f64, i32)>::new();
 
         // Compute the distances between the instance and all the data
-        for (index, point) in self.data.iter().enumerate() {
+        for (index, point) in self.data.as_ref().unwrap().iter().enumerate() {
             let distance = (self.distance_function)(point, instance);
             distances.push((distance, index.try_into().unwrap() ));
         }
@@ -45,7 +45,7 @@ impl KNNClassifier {
 
 impl Classifier for KNNClassifier {
 
-    fn fit(&self, data: &Vec<Vec<f64>>, targets: &Vec<i32>) {
+    fn fit(&mut self, data: &Vec<Vec<f64>>, targets: &Vec<i32>) {
         self.data = Some(data.clone());
         self.targets = Some(targets.clone());
     }
@@ -63,17 +63,21 @@ impl Classifier for KNNClassifier {
 
             for neighbor in neighbors {
 				let neighbor_index: usize = neighbor.try_into().unwrap();
-                let neighbor_class = self.targets.unwrap().get(neighbor_index);
+                let neighbor_class = self.targets.as_ref().unwrap().get(neighbor_index);
                 let counter = count.entry(neighbor_class).or_insert(0);
                 *counter += 1;
             }
 
             // predict the class
-            let prediction: i32 = count.iter() // iterate over the HashMap
+            let prediction_count =count.iter() // iterate over the HashMap
                                        .max_by( |a, b| a.1.cmp(&b.1) ) // get the max value using
                                                                        // the value
-                                       .map( |k, _v| k ); // map the result to only get the
+                                       .map( |(k, _v)| k ); // map the result to only get the
                                                           // predicted class
+			let prediction: i32 = match prediction_count {
+				Some(number) => *number.unwrap(),
+				None => 0,
+			};
 
             predictions.push(prediction);
 
