@@ -35,7 +35,7 @@ fn main() {
     let mut knn_classifier = KNNClassifier::new(3, euclidean_distance);
 	let mut label_encoder = LabelEncoder::new();
 
-	let (x_iris, y_iris) = read_x_y_from_csv(data_file,  true, '#');
+	let (x_iris, y_iris) = read_x_y_from_csv::<f64, String>(data_file,  true, '#');
 
 	label_encoder.fit(&y_iris);
 

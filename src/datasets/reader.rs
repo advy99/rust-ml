@@ -1,7 +1,10 @@
 use std::fs::*;
 use std::io::{BufReader, BufRead};
+use std::fmt::Debug;
 
-pub fn read_x_y_from_csv(file: &str, has_header: bool, comment_char: char) -> (Vec<Vec<f64>>, Vec<String>) {
+pub fn read_x_y_from_csv<T: std::str::FromStr, U: std::str::FromStr>(file: &str, has_header: bool, comment_char: char) -> (Vec<Vec<T>>, Vec<U>)
+where <T as std::str::FromStr>::Err: Debug, <U as std::str::FromStr>::Err: Debug
+ {
 
 	let mut data = Vec::new();
 	let mut targets = Vec::new();
