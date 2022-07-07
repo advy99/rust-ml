@@ -6,7 +6,7 @@ pub fn read_x_y_from_csv(file: &str, has_header: bool, comment_char: char) -> (V
 	let mut data = Vec::new();
 	let mut targets = Vec::new();
 
-	let data_flow = File::open(file).expect("Data file not found");
+	let data_flow = File::open(file).expect( format!("Data file not found: {}", file).as_str() );
 	let reader = BufReader::new(data_flow);
 
 	let mut reader_lines = reader.lines();
